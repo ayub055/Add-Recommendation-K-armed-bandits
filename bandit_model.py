@@ -279,9 +279,48 @@ def study_a_impact(runs=2000, time=1000):
     plt.savefig('a_impact.png')
     plt.close()
 
+def compare_with_without_a(runs=2000, time=1000):
+    """
+    Compares the performance of the bandit algorithm with and without the parameter 'a'.
+
+    Parameters:
+    ----------
+    runs : int, optional - Number of independent runs to simulate (default: 2000).
+    time : int, optional - Number of steps per run (default: 1000).
+    """
+    a_values = [0.5, 0.7, 0.9]  # Different values of 'a' to test
+    bandits_with_a = [Bandit(epsilon=0.1, sample_averages=True, a=a) for a in a_values]
+    bandit_without_a = Bandit(epsilon=0.1, sample_averages=True, a=1.0)  # Standard sample average (a = 1)
+    bandits = bandits_with_a + [bandit_without_a]
+    labels = [f'With $a = {a}$' for a in a_values] + ['Without $a$ (Standard)']
+
+    best_action_counts, rewards = simulate(runs, time, bandits)
+
+    plt.figure(figsize=(10, 20))
+
+    # Plot average rewards for each configuration
+    plt.subplot(2, 1, 1)
+    for label, reward in zip(labels, rewards):
+        plt.plot(reward, label=label)
+    plt.xlabel('Steps')
+    plt.ylabel('Average reward')
+    plt.legend()
+
+    # Plot percentage of optimal actions for each configuration
+    plt.subplot(2, 1, 2)
+    for label, counts in zip(labels, best_action_counts):
+        plt.plot(counts, label=label)
+    plt.xlabel('Steps')
+    plt.ylabel('% Optimal action')
+    plt.legend()
+
+    plt.savefig('compare_with_without_a.png')
+    plt.close()
+
 if __name__ == '__main__':
     # action_reward_distribution()
     # explore_vs_exploit()
     # initial_value_check()
     UCB_bandit()
     study_a_impact()
+    compare_with_without_a()
