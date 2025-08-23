@@ -56,6 +56,7 @@ class Bandit:
         self.average_reward += (reward - self.average_reward) / self.time
 
         if self.sample_averages:
+            # self.q_estimation[action] += (reward - self.q_estimation[action]) / self.action_count[action]
             # Generalized decreasing step size: 1 / (n+1)^a
             step_size = 1 / (self.action_count[action] ** self.a)
             self.q_estimation[action] += step_size * (reward - self.q_estimation[action])
