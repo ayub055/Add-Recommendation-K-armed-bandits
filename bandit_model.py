@@ -58,6 +58,7 @@ class Bandit:
         self.time = 0
         self.average_reward = 0
 
+        # AAAA  ----- 
     def act(self):
         """
         Selects an action based on the current strategy.
@@ -83,7 +84,9 @@ class Bandit:
         best_action = np.random.choice(np.where(self.q_estimation == q_best)[0])
         return best_action
 
-    def step(self, action, external_reward=None):
+    def step(self, 
+             action, 
+             external_reward=None):
         """
         Takes an action and updates the bandit's state.
 
@@ -116,7 +119,9 @@ class Bandit:
         
         return reward
     
-def simulate(runs, time, bandits):
+def simulate(runs, 
+             time, 
+             bandits):
     """
     Simulates multiple runs of the bandit problem.
 
@@ -245,7 +250,7 @@ def UCB_bandit(runs=2000, time=1000):
     plt.savefig('UCB_vs_epsilon_greedy.png')
     plt.close()
 
-def study_a_impact(runs=2000, time=1000):
+def study_a_impact(runs=2000, time=5000):
     """
     Studies the impact of changing the parameter 'a' (generalized step size) on performance.
 
@@ -254,7 +259,7 @@ def study_a_impact(runs=2000, time=1000):
     runs : int, optional - Number of independent runs to simulate (default: 2000).
     time : int, optional - Number of steps per run (default: 1000).
     """
-    a_values = [0.5, 0.6, 0.7, 0.8, 0.9]  # Different values of 'a' to test
+    a_values = [0.1, 0.2, 0.6]  # Different values of 'a' to test
     bandits = [Bandit(epsilon=0.2, sample_averages=True, a=a) for a in a_values]
     best_action_counts, rewards = simulate(runs, time, bandits)
 
@@ -288,7 +293,7 @@ def compare_with_without_a(runs=2000, time=1000):
     runs : int, optional - Number of independent runs to simulate (default: 2000).
     time : int, optional - Number of steps per run (default: 1000).
     """
-    a_values = [0.5, 0.7, 0.9]  # Different values of 'a' to test
+    a_values = [0.6, 0.7]  # Different values of 'a' to test
     bandits_with_a = [Bandit(epsilon=0.1, sample_averages=True, a=a) for a in a_values]
     bandit_without_a = Bandit(epsilon=0.1, sample_averages=True, a=1.0)  # Standard sample average (a = 1)
     bandits = bandits_with_a + [bandit_without_a]
@@ -321,6 +326,6 @@ if __name__ == '__main__':
     # action_reward_distribution()
     # explore_vs_exploit()
     # initial_value_check()
-    UCB_bandit()
-    study_a_impact()
+    # UCB_bandit()
+    # study_a_impact()
     compare_with_without_a()
